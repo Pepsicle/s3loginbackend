@@ -12,12 +12,11 @@ namespace s3loginbackend.Models
         public string tournamentDescription { get; set; }
         public List<UserModel> tournamentUsers { get; set; }
 
-        public TournamentModel(int tournamentid, string tournamentorganisor, string tournamentdescription, List<UserModel> tournamentusers)
+        public TournamentModel(int tournamentid, string tournamentorganisor, string tournamentdescription)
         {
             tournamentId = tournamentid;
             tournamentOrganisor = tournamentorganisor;
             tournamentDescription = tournamentdescription;
-            tournamentUsers = tournamentusers;
         }
     }
 }

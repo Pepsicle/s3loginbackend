@@ -51,18 +51,25 @@ namespace s3loginbackend.Controllers
             }
         }
 
-        [HttpDelete("DeleteUser")]
-        public int DeleteUser(string username, string password, int userId)
+        [HttpGet("GetAllTournaments")]
+        public List<TournamentModel> GetAllTournaments()
         {
-            LoginLogic loginLogic = new LoginLogic();
-            if (loginLogic.DeleteUser(username, password, userId) == 1)
-            {
-                return StatusCodes.Status200OK;
-            }
-            else
-            {
-                return StatusCodes.Status500InternalServerError;
-            }
+            TournamentLogic tournamentLogic = new TournamentLogic();
+            return tournamentLogic.GetAllTournaments();
         }
+
+        //[HttpDelete("DeleteUser")]
+        //public int DeleteUser(string username, string password, int userId)
+        //{
+        //    LoginLogic loginLogic = new LoginLogic();
+        //    if (loginLogic.DeleteUser(username, password, userId) == 1)
+        //    {
+        //        return StatusCodes.Status200OK;
+        //    }
+        //    else
+        //    {
+        //        return StatusCodes.Status500InternalServerError;
+        //    }
+        //}
     }
 }

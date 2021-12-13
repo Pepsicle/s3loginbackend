@@ -40,6 +40,34 @@ namespace s3loginbackend.Logic
             return "Error";
         }
 
+        public List<TournamentModel> GetAllTournaments()
+        {
+            string query = "SELECT tournamentid, organisor, tournamentdescription, winner FROM tournaments";
+            MySqlCommand command = new MySqlCommand(query, databaseConnection);
+            List<TournamentModel> tournamentList = new List<TournamentModel>();
+            databaseConnection.Open();
+            reader = command.ExecuteReader();
+            try
+            {
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        var tourid = reader.GetInt32("tournamentid");
+                        var tourorg = reader.GetString("organisor");
+                        var tourdesc = reader.GetString("tournamentdescription");
+                        TournamentModel tournament = new TournamentModel(tourid, tourorg, tourdesc);
+                        tournamentList.Add(tournament);
+                    }
+                }
+                return tournamentList;
+            }
+            catch (Exception error)
+            {
+                return null;
+            }
+        }
+
         public List<UserModel> GetTournamentUsers(int tournamentId)
         {
             string query = "SELECT userid FROM usertournament WHERE tournamentid= @tournamentid";
