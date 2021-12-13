@@ -38,10 +38,10 @@ namespace s3loginbackend.Controllers
         }
 
         [HttpPost("AddPlayerToTournament")]
-        public int AddPlayerToTournament(int userId, int tournamentId)
+        public int AddPlayerToTournament(string userName, int tournamentId)
         {
             TournamentLogic tournamentLogic = new TournamentLogic();
-            if (tournamentLogic.AddPlayerToTournament(userId, tournamentId))
+            if (tournamentLogic.AddPlayerToTournament(userName, tournamentId))
             {
                 return StatusCodes.Status200OK;
             }

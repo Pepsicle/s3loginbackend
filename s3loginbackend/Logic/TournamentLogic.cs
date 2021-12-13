@@ -40,6 +40,33 @@ namespace s3loginbackend.Logic
             return "Error";
         }
 
+        private int GetIdByUsername(string userName)
+        {
+            string query = "SELECT userid FROM users WHERE username=@userName";
+            MySqlCommand command = new MySqlCommand(query, databaseConnection);
+            //databaseConnection.Open();
+            command.Parameters.AddWithValue("@userName", userName);
+            reader = command.ExecuteReader();
+            try
+            {
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        int userid = reader.GetInt32("userid");
+                        reader.Close();
+                        return userid;
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                throw (error);
+            }
+
+            return 0;
+        }
+
         public List<TournamentModel> GetAllTournaments()
         {
             string query = "SELECT tournamentid, organisor, tournamentdescription, winner FROM tournaments";
@@ -112,12 +139,12 @@ namespace s3loginbackend.Logic
             return true;
         }
 
-        public bool AddPlayerToTournament(int userId, int tournamentId)
+        public bool AddPlayerToTournament(string userName, int tournamentId)
         {
             string query = "INSERT INTO usertournament (userid, tournamentid) VALUES (@userid, @tournamentid);";
             MySqlCommand command = new MySqlCommand(query, databaseConnection);
             databaseConnection.Open();
-            command.Parameters.AddWithValue("@userid", userId);
+            command.Parameters.AddWithValue("@userid", GetIdByUsername(userName));
             command.Parameters.AddWithValue("@tournamentid", tournamentId);
 
             command.ExecuteNonQuery();
