@@ -87,10 +87,12 @@ namespace s3loginbackend.Logic
                         tournamentList.Add(tournament);
                     }
                 }
+                databaseConnection.Close();
                 return tournamentList;
             }
             catch (Exception error)
             {
+                databaseConnection.Close();
                 return null;
             }
         }
@@ -119,10 +121,12 @@ namespace s3loginbackend.Logic
                     UserModel userModel = new UserModel(GetUsernameById(userId), userId);
                     userList.Add(userModel);
                 }
+                databaseConnection.Close();
                 return userList;
             }
             catch(Exception error)
             {
+                databaseConnection.Close();
                 return null;
             }
         }
@@ -136,6 +140,7 @@ namespace s3loginbackend.Logic
             command.Parameters.AddWithValue("@tournamentdescription", tournamentDescription);
 
             command.ExecuteNonQuery();
+            databaseConnection.Close();
             return true;
         }
 
@@ -148,6 +153,7 @@ namespace s3loginbackend.Logic
             command.Parameters.AddWithValue("@tournamentid", tournamentId);
 
             command.ExecuteNonQuery();
+            databaseConnection.Close();
             return true;
         }
 
@@ -160,6 +166,7 @@ namespace s3loginbackend.Logic
             command.Parameters.AddWithValue("@password", password);
             command.Parameters.AddWithValue("@userId", userId);
             command.Parameters.AddWithValue("@newUsername", newUsername);
+            databaseConnection.Close();
             return command.ExecuteNonQuery();
         }
 
@@ -181,23 +188,28 @@ namespace s3loginbackend.Logic
                         {
                             int userId = reader.GetInt32("userid");
                             UserModel userModel = new UserModel(username, userId);
+                            databaseConnection.Close();
                             return userModel;
                         }
                         else
                         {
+                            databaseConnection.Close();
                             return null;
                         }
                     }
                 }
                 else
                 {
+                    databaseConnection.Close();
                     return null;
                 }
             }
             catch
             {
+                databaseConnection.Close();
                 return null;
             }
+            databaseConnection.Close();
             return null;
         }
 
@@ -209,6 +221,7 @@ namespace s3loginbackend.Logic
             command.Parameters.AddWithValue("@username", username);
             command.Parameters.AddWithValue("@password", password);
             command.Parameters.AddWithValue("@userId", userId);
+            databaseConnection.Close();
             return command.ExecuteNonQuery();
         }
     }
