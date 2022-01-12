@@ -157,72 +157,26 @@ namespace s3loginbackend.Logic
             return true;
         }
 
-        public int UpdateUser(string username, string password, string newUsername, int userId)
+        public int DeleteTournament(int tournamentId, string organisor)
         {
-            string query = "UPDATE users SET username = @newUsername WHERE userid = @userId AND username = @username AND password = @password;";
-            MySqlCommand command = new MySqlCommand(query, databaseConnection);
-            databaseConnection.Open();
-            command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", password);
-            command.Parameters.AddWithValue("@userId", userId);
-            command.Parameters.AddWithValue("@newUsername", newUsername);
-            databaseConnection.Close();
-            return command.ExecuteNonQuery();
-        }
+            string query = "DELETE FROM tournaments WHERE tournamentid = @tournamentId AND organisor = @organisor;";
+            string query2 = "DELETE FROM usertournament WHERE tournamentid = @tournamentId2;";
 
-        public UserModel Login(string username, string password)
-        {
-            string query = "SELECT * FROM users WHERE username=@username;";
             MySqlCommand command = new MySqlCommand(query, databaseConnection);
-            databaseConnection.Open();
-            command.Parameters.AddWithValue("@username", username);
-            reader = command.ExecuteReader();
-            try
-            {
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        string DbPassword = reader.GetString("password");
-                        if (password == DbPassword)
-                        {
-                            int userId = reader.GetInt32("userid");
-                            UserModel userModel = new UserModel(username, userId);
-                            databaseConnection.Close();
-                            return userModel;
-                        }
-                        else
-                        {
-                            databaseConnection.Close();
-                            return null;
-                        }
-                    }
-                }
-                else
-                {
-                    databaseConnection.Close();
-                    return null;
-                }
-            }
-            catch
-            {
-                databaseConnection.Close();
-                return null;
-            }
-            databaseConnection.Close();
-            return null;
-        }
+            MySqlCommand command2 = new MySqlCommand(query2, databaseConnection);
 
-        public int DeleteUser(string username, string password, int userId)
-        {
-            string query = "DELETE FROM users WHERE userid = @userId AND username = @username AND password = @password;";
-            MySqlCommand command = new MySqlCommand(query, databaseConnection);
             databaseConnection.Open();
-            command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", password);
-            command.Parameters.AddWithValue("@userId", userId);
+            command.Parameters.AddWithValue("@tournamentId", tournamentId);
+            command.Parameters.AddWithValue("@organisor", organisor);
+            var result = command.ExecuteNonQuery();
+            databaseConnection.Close(); 
+
+            databaseConnection.Open();
+            command2.Parameters.AddWithValue("@tournamentId2", tournamentId);
+            command2.ExecuteNonQuery();
             databaseConnection.Close();
-            return command.ExecuteNonQuery();
+
+            return result;
         }
     }
 }

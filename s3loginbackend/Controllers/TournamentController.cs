@@ -71,5 +71,19 @@ namespace s3loginbackend.Controllers
         //        return StatusCodes.Status500InternalServerError;
         //    }
         //}
+
+        [HttpDelete("DeleteTournament")]
+        public int DeleteTournament(int tournamentId, string organisor)
+        {
+            TournamentLogic tournamentLogic = new TournamentLogic();
+            if (tournamentLogic.DeleteTournament(tournamentId, organisor) == 1)
+            {
+                return StatusCodes.Status200OK;
+            }
+            else
+            {
+                return StatusCodes.Status500InternalServerError;
+            }
+        }
     }
 }
