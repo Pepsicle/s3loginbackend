@@ -28,6 +28,20 @@ namespace s3loginbackend.Controllers
             }
         }
 
+        [HttpPost("CreateTournament")]
+        public int CreateTournameent(string organisor, string tournamentDescription)
+        {
+            TournamentLogic tournamentLogic = new TournamentLogic();
+            if (tournamentLogic.CreateTournament(organisor, tournamentDescription))
+            {
+                return StatusCodes.Status200OK;
+            }
+            else
+            {
+                return StatusCodes.Status500InternalServerError;
+            }
+        }
+
         [HttpGet("GetTournamentUsers")]
         public List<UserModel> GetTournamentUsers(int tournamentId)
         {
